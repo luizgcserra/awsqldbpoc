@@ -17,12 +17,15 @@ public class QldbConfiguration {
 
 	@Value("${region}")
 	private String region;
+	
+	@Value("${max-concurrent-transactions:1000}")
+	private int maxConcurrentTransactions;
 
 	@Bean
 	public QldbDriver amazonQldbDriver(QldbSessionClientBuilder sessionBuilder) {
 		return QldbDriver.builder().ledger(Constants.LEDGER_NAME)
 				.transactionRetryPolicy(RetryPolicy.builder().maxRetries(Constants.RETRY_LIMIT).build())
-				.sessionClientBuilder(sessionBuilder).build();
+				.sessionClientBuilder(sessionBuilder).maxConcurrentTransactions(maxConcurrentTransactions).build();
 	}
 
 	@Bean

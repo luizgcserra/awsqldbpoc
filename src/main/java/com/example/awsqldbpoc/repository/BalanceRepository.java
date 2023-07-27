@@ -7,15 +7,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.amazon.ion.IonValue;
 import com.example.awsqldbpoc.models.BalanceModel;
 import com.example.awsqldbpoc.utils.Constants;
 import com.example.awsqldbpoc.utils.IonLocalDateTimeSerializer;
 
 import software.amazon.qldb.Result;
-import software.amazon.qldb.TransactionExecutor;
 
-public class BalanceRepository {
+@Repository
+public class BalanceRepository extends QldbRepository {
 
 	private static final String UPDATE_QUERY = "UPDATE " + Constants.BALANCE_TABLE_NAME
 			+ " AS b SET b.BalanceDate = ?, b.AvailableAmount = ? WHERE b.AccountId = ?";
@@ -24,13 +26,6 @@ public class BalanceRepository {
 			+ Constants.BALANCE_TABLE_NAME + " WHERE AccountId = ?";
 
 	private static final String INSERT_QUERY = "INSERT INTO " + Constants.BALANCE_TABLE_NAME + " ?";
-
-	private final TransactionExecutor txn;
-
-	public BalanceRepository(TransactionExecutor txn) {
-		super();
-		this.txn = txn;
-	}
 
 	public Result updateBalance(final String accountId, final BigDecimal amount) throws IOException {
 
@@ -45,19 +40,19 @@ public class BalanceRepository {
 			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount.getAvailableAmount()));
 			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount.getAccountId()));
 
-			return txn.execute(UPDATE_QUERY, parameters);
+			return execute(UPDATE_QUERY, parameters);
 		} else {
 			final List<IonValue> parameters = Collections.singletonList(
 					Constants.MAPPER.writeValueAsIonValue(new BalanceModel(accountId, LocalDateTime.now(), amount)));
 
-			return txn.execute(INSERT_QUERY, parameters);
+			return execute(INSERT_QUERY, parameters);
 		}
 
 	}
 
 	private BalanceModel getCurrentBalance(final String accountId) throws IOException {
 
-		final Result result = txn.execute(SELECT_QUERY, Constants.MAPPER.writeValueAsIonValue(accountId));
+		final Result result = execute(SELECT_QUERY, Constants.MAPPER.writeValueAsIonValue(accountId));
 
 		if (result.isEmpty())
 			return null;
