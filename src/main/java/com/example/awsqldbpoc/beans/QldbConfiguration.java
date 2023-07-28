@@ -1,10 +1,11 @@
 package com.example.awsqldbpoc.beans;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.awsqldbpoc.utils.Constants;
+import com.example.awsqldbpoc.qldb.utils.Constants;
 
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.qldbsession.QldbSessionClient;
@@ -12,12 +13,13 @@ import software.amazon.awssdk.services.qldbsession.QldbSessionClientBuilder;
 import software.amazon.qldb.QldbDriver;
 import software.amazon.qldb.RetryPolicy;
 
+@Qualifier("qldb")
 @Configuration
 public class QldbConfiguration {
 
-	@Value("${region}")
+	@Value("${cloud.aws.region}")
 	private String region;
-	
+
 	@Value("${max-concurrent-transactions:1000}")
 	private int maxConcurrentTransactions;
 

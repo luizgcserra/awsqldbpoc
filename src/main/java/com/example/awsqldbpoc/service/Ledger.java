@@ -2,41 +2,54 @@ package com.example.awsqldbpoc.service;
 
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.example.awsqldbpoc.domain.Balance;
 import com.example.awsqldbpoc.domain.Transaction;
 import com.example.awsqldbpoc.domain.TransactionBlock;
+import com.example.awsqldbpoc.models.BalanceModel;
 import com.example.awsqldbpoc.models.TransactionModel;
-import com.example.awsqldbpoc.repository.QldbUnitOfWork;
+import com.example.awsqldbpoc.repository.UnitOfWork;
+
+import io.micrometer.core.annotation.Timed;
 
 @Service
 public class Ledger {
 
-	private final QldbUnitOfWork contextRepository;
+	private static final Logger LOGGER = LoggerFactory.getLogger(Ledger.class);
 
-	public Ledger(QldbUnitOfWork contextRepository) {
+	private final UnitOfWork unitOfWork;
+
+	public Ledger(UnitOfWork unitOfWork) {
 		super();
-		this.contextRepository = contextRepository;
+		this.unitOfWork = unitOfWork;
 	}
 
-	public void registerTransaction(Transaction transaction) {
-		this.contextRepository.execute(context -> {
+	@Timed(value = "registerTransaction", percentiles = { .5, .9, .95, .99 })
+	public Balance registerTransaction(Transaction transaction) {
+		return this.unitOfWork.execute(context -> {
 			try {
 				context.transactionRepository().registerTransaction(new TransactionModel(transaction.getAccountId(),
 						transaction.getTransactionId(), transaction.getUniqueId(), transaction.getTransactionDate(),
 						transaction.getDescription(), transaction.getTransactionAmount()));
-				context.balanceRepository().updateBalance(transaction.getAccountId(),
+
+				BalanceModel updatedBalance = context.balanceRepository().updateBalance(transaction.getAccountId(),
 						transaction.getTransactionAmount());
 
+				return new Balance(updatedBalance.getAccountId(), updatedBalance.getBalanceDate(),
+						updatedBalance.getAvailableAmount());
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("Register Transaction failed", e);
 				throw new RuntimeException(e);
 			}
 		});
 	}
 
-	public void registerTransaction(TransactionBlock transactionBlock) {
-		this.contextRepository.execute(context -> {
+	@Timed(value = "registerTransactionBlock", percentiles = { .5, .9, .95, .99 })
+	public Balance registerTransaction(TransactionBlock transactionBlock) {
+		return this.unitOfWork.execute(context -> {
 			try {
 				context.transactionRepository()
 						.registerTransaction(transactionBlock.getAccountTransactions().stream()
@@ -46,11 +59,14 @@ public class Ledger {
 										transaction.getTransactionAmount()))
 								.collect(Collectors.toList()));
 
-				context.balanceRepository().updateBalance(transactionBlock.getAccountId(),
+				BalanceModel updatedBalance = context.balanceRepository().updateBalance(transactionBlock.getAccountId(),
 						transactionBlock.getTotalAmount());
 
+				return new Balance(updatedBalance.getAccountId(), updatedBalance.getBalanceDate(),
+						updatedBalance.getAvailableAmount());
+
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("Register Transaction failed", e);
 				throw new RuntimeException(e);
 			}
 		});

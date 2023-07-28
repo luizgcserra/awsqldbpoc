@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.utils;
+package com.example.awsqldbpoc.qldb.utils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

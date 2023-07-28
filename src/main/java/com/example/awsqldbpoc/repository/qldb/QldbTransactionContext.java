@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.repository;
+package com.example.awsqldbpoc.repository.qldb;
 
 import software.amazon.qldb.TransactionExecutor;
 

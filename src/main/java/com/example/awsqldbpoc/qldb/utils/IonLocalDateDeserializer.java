@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.utils;
+package com.example.awsqldbpoc.qldb.utils;
 
 import com.amazon.ion.Timestamp;
 import com.fasterxml.jackson.core.JsonParser;

@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.utils;
+package com.example.awsqldbpoc.qldb.utils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,6 +17,7 @@ public class IonBigDecimalDeserializer extends JsonDeserializer<BigDecimal> {
 		return decimalToBigDecimal((String) jp.getEmbeddedObject());
 	}
 
+	@SuppressWarnings("deprecation")
 	private BigDecimal decimalToBigDecimal(String value) {
 		return new BigDecimal(Double.parseDouble(value)).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}

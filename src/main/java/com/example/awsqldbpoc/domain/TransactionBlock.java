@@ -21,8 +21,8 @@ public class TransactionBlock {
 	public BigDecimal getTotalAmount() {
 		BigDecimal amount = BigDecimal.ZERO;
 
-		for (int i = 0; i < this.accountTransactions.size(); i++) {
-			amount.add(this.getAccountTransactions().get(i).getTransactionAmount());
+		for (Transaction tx : this.getAccountTransactions()) {
+			amount = amount.add(tx.getTransactionAmount());
 		}
 
 		return amount;

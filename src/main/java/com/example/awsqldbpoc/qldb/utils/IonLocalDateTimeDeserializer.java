@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.utils;
+package com.example.awsqldbpoc.qldb.utils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -18,6 +18,7 @@ public class IonLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime
 		return timestampToLocalDate((Timestamp) jp.getEmbeddedObject());
 	}
 
+	@SuppressWarnings("deprecation")
 	private LocalDateTime timestampToLocalDate(Timestamp timestamp) {
 		return LocalDateTime.of(timestamp.getYear(), timestamp.getMonth(), timestamp.getDay(), timestamp.getHour(),
 				timestamp.getMinute(), timestamp.getSecond(),

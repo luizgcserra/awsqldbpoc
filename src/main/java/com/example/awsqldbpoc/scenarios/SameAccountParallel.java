@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc;
+package com.example.awsqldbpoc.scenarios;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -6,31 +6,33 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.example.awsqldbpoc.domain.Transaction;
 import com.example.awsqldbpoc.service.Ledger;
 
-@Profile("RandomAccountParallel")
+@Profile("SameAccountParallel")
 @Component
-public class RandomAccountParallel implements ApplicationListener<ApplicationReadyEvent> {
+public class SameAccountParallel extends ScenarioBase {
 
-	private AtomicInteger threadCount = new AtomicInteger();
+	private static final Logger LOGGER = LoggerFactory.getLogger(SameAccountBatchParallel.class);
 
+	private final AtomicInteger threadCount = new AtomicInteger();
 	private final Ledger ledger;
 	private final Executor asyncExecutor;
 
-	@Value("${max-threads:500}")
+	@Value("${max-threads:100}")
 	private int maxThreads;
-	
+
 	@Value("${transactions-count:2000}")
 	private int transactionsCount;
 
-	public RandomAccountParallel(Ledger ledger, Executor asyncExecutor) {
+	public SameAccountParallel(Ledger ledger, Executor asyncExecutor) {
 		super();
 		this.ledger = ledger;
 		this.asyncExecutor = asyncExecutor;
@@ -38,13 +40,15 @@ public class RandomAccountParallel implements ApplicationListener<ApplicationRea
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
-		System.out.println("RandomAccountParallel");
+		LOGGER.info("SameAccountParallel: {} transactions", transactionsCount);
 
 		long currentDate = System.currentTimeMillis();
+		String accountId = UUID.randomUUID().toString();
 
 		try {
 			for (int i = 1; i <= transactionsCount; i++) {
 				threadCount.incrementAndGet();
+
 				int currentExecution = i;
 
 				while (threadCount.get() >= maxThreads) {
@@ -55,13 +59,11 @@ public class RandomAccountParallel implements ApplicationListener<ApplicationRea
 					long currentExecutionTime = System.currentTimeMillis();
 
 					try {
-						ledger.registerTransaction(new Transaction(UUID.randomUUID().toString(),
-								String.valueOf(currentExecution), LocalDateTime.now(),
-								"Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
+						ledger.registerTransaction(new Transaction(accountId, String.valueOf(currentExecution),
+								LocalDateTime.now(), "Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
 					} finally {
-						System.out.println("Processed transaction #" + currentExecution + " in "
-								+ (System.currentTimeMillis() - currentExecutionTime) + " ms - Thread: "
-								+ Thread.currentThread().getName());
+						LOGGER.info("Processed transaction #{} in {} ms - Thread: {}", currentExecution,
+								(System.currentTimeMillis() - currentExecutionTime), Thread.currentThread().getName());
 
 						threadCount.decrementAndGet();
 					}
@@ -70,13 +72,13 @@ public class RandomAccountParallel implements ApplicationListener<ApplicationRea
 			}
 
 			while (threadCount.get() > 0) {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			LOGGER.error(e.getMessage(), e);
 		} finally {
-			System.out.println("Process finished: " + (System.currentTimeMillis() - currentDate) + " ms");
+			LOGGER.info("Process finished: {} ms", (System.currentTimeMillis() - currentDate));
+			super.onApplicationEvent(event);
 		}
 	}
 
