@@ -3,8 +3,8 @@ package com.example.awsqldbpoc.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.example.awsqldbpoc.qldb.utils.IonLocalDateTimeDeserializer;
-import com.example.awsqldbpoc.qldb.utils.IonLocalDateTimeSerializer;
+import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeDeserializer;
+import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

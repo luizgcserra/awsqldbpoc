@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import com.amazon.ion.IonValue;
 import com.example.awsqldbpoc.models.BalanceModel;
-import com.example.awsqldbpoc.qldb.utils.Constants;
-import com.example.awsqldbpoc.qldb.utils.IonLocalDateTimeSerializer;
 import com.example.awsqldbpoc.repository.IBalanceRepository;
+import com.example.awsqldbpoc.utils.qldb.Constants;
+import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeSerializer;
 
 import io.micrometer.core.annotation.Timed;
 import software.amazon.qldb.Result;

@@ -1,4 +1,4 @@
-package com.example.awsqldbpoc.qldb.utils;
+package com.example.awsqldbpoc.utils.qldb;
 
 import com.amazon.ion.IonSystem;
 import com.amazon.ion.system.IonSystemBuilder;

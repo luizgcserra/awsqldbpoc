@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.amazon.ion.IonValue;
 import com.example.awsqldbpoc.models.TransactionModel;
-import com.example.awsqldbpoc.qldb.utils.Constants;
 import com.example.awsqldbpoc.repository.ITransactionRepository;
+import com.example.awsqldbpoc.utils.qldb.Constants;
 
 import io.micrometer.core.annotation.Timed;
 
