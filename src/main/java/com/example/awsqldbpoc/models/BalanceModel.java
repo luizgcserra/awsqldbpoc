@@ -1,24 +1,19 @@
 package com.example.awsqldbpoc.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeDeserializer;
-import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public final class BalanceModel {
 
 	private final String accountId;
-	private final LocalDateTime balanceDate;
+	private final Long balanceDate;
 	private final BigDecimal availableAmount;
 
 	@JsonCreator
 	public BalanceModel(@JsonProperty("AccountId") String accountId,
-			@JsonProperty("BalanceDate") LocalDateTime balanceDate,
+			@JsonProperty("BalanceDate") Long balanceDate,
 			@JsonProperty("AvailableAmount") BigDecimal availableAmount) {
 		super();
 		this.accountId = accountId;
@@ -32,9 +27,7 @@ public final class BalanceModel {
 	}
 
 	@JsonProperty("BalanceDate")
-	@JsonSerialize(using = IonLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = IonLocalDateTimeDeserializer.class)
-	public LocalDateTime getBalanceDate() {
+	public Long getBalanceDate() {
 		return balanceDate;
 	}
 

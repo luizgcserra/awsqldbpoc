@@ -17,9 +17,7 @@ public abstract class ScenarioBase implements ApplicationListener<ApplicationRea
 
 			this.sleep();
 
-			System.out.println("Press any key to exit");
-
-			System.in.read();
+			System.exit(0);
 		} catch (Exception e) {
 
 		}

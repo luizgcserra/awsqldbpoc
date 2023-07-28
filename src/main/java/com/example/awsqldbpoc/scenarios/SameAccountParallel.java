@@ -20,7 +20,7 @@ import com.example.awsqldbpoc.service.Ledger;
 @Component
 public class SameAccountParallel extends ScenarioBase {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SameAccountBatchParallel.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SameAccountParallel.class);
 
 	private final AtomicInteger threadCount = new AtomicInteger();
 	private final Ledger ledger;

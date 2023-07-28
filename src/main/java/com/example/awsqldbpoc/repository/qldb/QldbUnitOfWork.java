@@ -40,7 +40,6 @@ public class QldbUnitOfWork implements UnitOfWork {
 
 	@Override
 	public Balance execute(Function<UnitOfWork, Balance> action) {
-
 		return amazonQldbDriver.execute(txn -> {
 			try {
 				QldbTransactionContext.setTransactionExecutor(txn);

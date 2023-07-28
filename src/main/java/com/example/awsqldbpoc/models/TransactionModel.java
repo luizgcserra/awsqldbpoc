@@ -1,27 +1,22 @@
 package com.example.awsqldbpoc.models;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeDeserializer;
-import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public final class TransactionModel {
 
 	private final String accountId;
 	private final String transactionId;
 	private final String uniqueId;
-	private final LocalDateTime transactionDate;
+	private final Long transactionDate;
 	private final String description;
 	private final BigDecimal transactionAmount;
 
 	@JsonCreator
 	public TransactionModel(@JsonProperty("AccountId") String accountId, @JsonProperty("TransactionId") String transactionId,
-			@JsonProperty("UniqueId") String uniqueId, @JsonProperty("TransactionDate") LocalDateTime transactionDate,
+			@JsonProperty("UniqueId") String uniqueId, @JsonProperty("TransactionDate") Long transactionDate,
 			@JsonProperty("Description") String description,
 			@JsonProperty("TransactionAmount") BigDecimal transactionAmount) {
 		super();
@@ -49,9 +44,7 @@ public final class TransactionModel {
 	}
 
 	@JsonProperty("TransactionDate")
-	@JsonSerialize(using = IonLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = IonLocalDateTimeDeserializer.class)
-	public LocalDateTime getTransactionDate() {
+	public Long getTransactionDate() {
 		return transactionDate;
 	}
 

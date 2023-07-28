@@ -27,7 +27,7 @@ public class RandomAccountParallel extends ScenarioBase {
 	private final Ledger ledger;
 	private final Executor asyncExecutor;
 
-	@Value("${max-threads:100}")
+	@Value("${max-threads:10}")
 	private int maxThreads;
 
 	@Value("${transactions-count:2000}")

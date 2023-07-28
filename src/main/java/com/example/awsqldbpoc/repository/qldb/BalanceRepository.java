@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 import com.amazon.ion.IonValue;
 import com.example.awsqldbpoc.models.BalanceModel;
 import com.example.awsqldbpoc.repository.IBalanceRepository;
+import com.example.awsqldbpoc.utils.DateTimeUtils;
 import com.example.awsqldbpoc.utils.qldb.Constants;
-import com.example.awsqldbpoc.utils.qldb.IonLocalDateTimeSerializer;
 
 import io.micrometer.core.annotation.Timed;
 import software.amazon.qldb.Result;
@@ -23,8 +23,7 @@ import software.amazon.qldb.Result;
 @Repository
 public class BalanceRepository extends QldbRepository implements IBalanceRepository {
 
-	private static final String UPDATE_QUERY = String.format(
-			"UPDATE %s AS b SET b.BalanceDate = ?, b.AvailableAmount = ? WHERE b.AccountId = ?",
+	private static final String UPDATE_QUERY = String.format("UPDATE %s AS b SET b = ? WHERE b.AccountId = ?",
 			Constants.BALANCE_TABLE_NAME);
 
 	private static final String SELECT_QUERY = String.format("SELECT %s FROM %s WHERE AccountId = ?",
@@ -41,18 +40,18 @@ public class BalanceRepository extends QldbRepository implements IBalanceReposit
 
 		if (currentBalance != null) {
 			BigDecimal availableAmount = currentBalance.getAvailableAmount();
-			newAmount = new BalanceModel(accountId, LocalDateTime.now(), availableAmount.add(amount));
+			newAmount = new BalanceModel(accountId, DateTimeUtils.toEpochMillis(LocalDateTime.now()),
+					availableAmount.add(amount));
 
 			final List<IonValue> parameters = new ArrayList<>();
-			parameters.add(IonLocalDateTimeSerializer.localDatetimeToTimestamp(newAmount.getBalanceDate()));
-			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount.getAvailableAmount()));
-			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount.getAccountId()));
+			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount));
+			parameters.add(Constants.SYSTEM.newString(newAmount.getAccountId()));
 
 			execute(UPDATE_QUERY, parameters);
 
 			return newAmount;
 		} else {
-			newAmount = new BalanceModel(accountId, LocalDateTime.now(), amount);
+			newAmount = new BalanceModel(accountId, DateTimeUtils.toEpochMillis(LocalDateTime.now()), amount);
 
 			execute(INSERT_QUERY, Collections.singletonList(Constants.MAPPER.writeValueAsIonValue(newAmount)));
 
@@ -63,7 +62,7 @@ public class BalanceRepository extends QldbRepository implements IBalanceReposit
 
 	private BalanceModel getCurrentBalance(final String accountId) throws IOException {
 
-		final Result result = execute(SELECT_QUERY, Constants.MAPPER.writeValueAsIonValue(accountId));
+		final Result result = execute(SELECT_QUERY, Constants.SYSTEM.newString(accountId));
 
 		if (result.isEmpty())
 			return null;

@@ -40,11 +40,13 @@ public class SameAccountSerial extends ScenarioBase {
 		try {
 			for (int i = 1; i <= transactionsCount; i++) {
 				long currentAccountDate = System.currentTimeMillis();
+				Transaction transaction = new Transaction(accountId, String.valueOf(i), LocalDateTime.now(),
+						"Transaction Test " + i, BigDecimal.valueOf(1));
 
-				ledger.registerTransaction(new Transaction(accountId, String.valueOf(i), LocalDateTime.now(),
-						"Transaction Test " + i, BigDecimal.valueOf(1)));
+				ledger.registerTransaction(transaction);
 
-				LOGGER.info("Processed transaction #{} in {} ms", i, (System.currentTimeMillis() - currentAccountDate));
+				LOGGER.info("Processed transaction #{} in {} ms - UniqueId: {}", i,
+						(System.currentTimeMillis() - currentAccountDate), transaction.getUniqueId());
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
