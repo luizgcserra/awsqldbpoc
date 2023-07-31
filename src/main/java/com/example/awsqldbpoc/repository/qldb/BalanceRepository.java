@@ -23,7 +23,8 @@ import software.amazon.qldb.Result;
 @Repository
 public class BalanceRepository extends QldbRepository implements IBalanceRepository {
 
-	private static final String UPDATE_QUERY = String.format("UPDATE %s AS b SET b = ? WHERE b.AccountId = ?",
+	private static final String UPDATE_QUERY = String.format(
+			"UPDATE %s AS b SET b.BalanceDate = ?, b.AvailableAmount = ? WHERE b.AccountId = ?",
 			Constants.BALANCE_TABLE_NAME);
 
 	private static final String SELECT_QUERY = String.format("SELECT %s FROM %s WHERE AccountId = ?",
@@ -44,7 +45,8 @@ public class BalanceRepository extends QldbRepository implements IBalanceReposit
 					availableAmount.add(amount));
 
 			final List<IonValue> parameters = new ArrayList<>();
-			parameters.add(Constants.MAPPER.writeValueAsIonValue(newAmount));
+			parameters.add(Constants.SYSTEM.newInt(newAmount.getBalanceDate()));
+			parameters.add(Constants.SYSTEM.newDecimal(newAmount.getAvailableAmount()));
 			parameters.add(Constants.SYSTEM.newString(newAmount.getAccountId()));
 
 			execute(UPDATE_QUERY, parameters);

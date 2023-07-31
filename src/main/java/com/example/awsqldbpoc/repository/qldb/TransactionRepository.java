@@ -1,9 +1,7 @@
 package com.example.awsqldbpoc.repository.qldb;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -21,8 +19,6 @@ import software.amazon.qldb.Result;
 public class TransactionRepository extends QldbRepository implements ITransactionRepository {
 
 	private static final String INSERT_QUERY = String.format("INSERT INTO %s ? ", Constants.TRANSACTION_TABLE_NAME);
-	private static final String UPDATE_QUERY = String.format("UPDATE %s AS t SET t = ? WHERE t.%s = ?",
-			Constants.TRANSACTION_TABLE_NAME, Constants.TRANSACTION_UNIQUEID_FIELD_NAME);
 	private static final String SELECT_QUERY = String.format("SELECT %s FROM %s WHERE %s = ?",
 			Constants.TRANSACTION_UNIQUEID_FIELD_NAME, Constants.TRANSACTION_TABLE_NAME,
 			Constants.TRANSACTION_UNIQUEID_FIELD_NAME);
@@ -31,16 +27,12 @@ public class TransactionRepository extends QldbRepository implements ITransactio
 	@Timed(value = "registerTransaction", percentiles = { .5, .9, .95, .99 })
 	public boolean registerTransaction(final TransactionModel transaction) throws IOException {
 
-		if (exists(transaction.getUniqueId())) {
-			final List<IonValue> parameters = new ArrayList<>();
-			parameters.add(Constants.MAPPER.writeValueAsIonValue(transaction));
-			parameters.add(Constants.SYSTEM.newString(transaction.getUniqueId()));
-
-			execute(UPDATE_QUERY, parameters);
-		} else
+		if (!exists(transaction.getUniqueId())) {
 			execute(INSERT_QUERY, Collections.singletonList(serialize(transaction)));
 
-		return true;
+			return true;
+		} else
+			return false;
 	}
 
 	private IonValue serialize(Object obj) {

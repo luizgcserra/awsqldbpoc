@@ -17,7 +17,7 @@ public class Transaction {
 		super();
 		this.accountId = accountId;
 		this.transactionId = transactionId;
-		this.uniqueId = accountId + "|" + transactionId;
+		this.uniqueId = accountId + "#" + transactionId;
 		this.transactionDate = transactionDate;
 		this.description = description;
 		this.transactionAmount = transactionAmount;

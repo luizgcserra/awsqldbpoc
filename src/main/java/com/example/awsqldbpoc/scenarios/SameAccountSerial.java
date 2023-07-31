@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.example.awsqldbpoc.domain.Transaction;
-import com.example.awsqldbpoc.repository.qldb.QldbUnitOfWork;
 import com.example.awsqldbpoc.service.Ledger;
 
 @Profile("SameAccountSerial")
@@ -26,7 +25,7 @@ public class SameAccountSerial extends ScenarioBase {
 	@Value("${transactions-count:2000}")
 	private int transactionsCount;
 
-	public SameAccountSerial(Ledger ledger, QldbUnitOfWork contextRepository) {
+	public SameAccountSerial(Ledger ledger) {
 		super();
 		this.ledger = ledger;
 	}
