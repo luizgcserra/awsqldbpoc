@@ -43,7 +43,7 @@ public class Ledger {
 							updatedBalance.getAvailableAmount());
 				} else
 					return null;
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				LOGGER.error("Register Transaction failed", e);
 				throw new RuntimeException(e);
 			}

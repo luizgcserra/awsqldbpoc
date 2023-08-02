@@ -2,10 +2,10 @@ package com.example.awsqldbpoc.beans;
 
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import com.example.awsqldbpoc.utils.qldb.Constants;
 
@@ -17,7 +17,7 @@ import software.amazon.qldb.QldbDriver;
 import software.amazon.qldb.RetryPolicy;
 import software.amazon.qldb.RetryPolicyContext;
 
-@Qualifier("qldb")
+@Profile("qldb")
 @Configuration
 public class QldbConfiguration {
 

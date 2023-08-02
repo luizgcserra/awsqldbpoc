@@ -1,12 +1,17 @@
 package com.example.awsqldbpoc.models;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class TransactionModel {
+public final class TransactionModel implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4229584401917634745L;
 	private final String accountId;
 	private final String transactionId;
 	private final String uniqueId;

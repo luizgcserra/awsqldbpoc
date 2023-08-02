@@ -34,7 +34,7 @@ public class BalanceRepository extends QldbRepository implements IBalanceReposit
 
 	@Override
 	@Timed(value = "updateBalance", percentiles = { .5, .9, .95, .99 })
-	public BalanceModel updateBalance(final String accountId, final BigDecimal amount) throws IOException {
+	public BalanceModel updateBalance(final String accountId, final BigDecimal amount) throws Throwable {
 
 		final BalanceModel currentBalance = this.getCurrentBalance(accountId);
 		BalanceModel newAmount = null;

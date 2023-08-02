@@ -90,7 +90,22 @@
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>1.12.515</version>
 		</dependency>
+		<dependency>
+			<groupId>io.codenotary</groupId>
+			<artifactId>immudb4j</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.11.1</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>
