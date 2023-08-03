@@ -50,8 +50,8 @@ public class SameAccountBatch extends ScenarioBase {
 				long currentAccountDate = System.currentTimeMillis();
 
 				for (int i = 1; i <= transactionBlockSize; i++) {
-					transactions.add(new Transaction(accountId, String.valueOf(i), LocalDateTime.now(),
-							"Transaction Test " + i, BigDecimal.valueOf(1)));
+					transactions.add(new Transaction(accountId, UUID.randomUUID().toString(), LocalDateTime.now(),
+							"Transaction Test " + i * j, BigDecimal.valueOf(1)));
 
 				}
 

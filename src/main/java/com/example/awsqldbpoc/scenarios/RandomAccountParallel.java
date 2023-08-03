@@ -59,7 +59,7 @@ public class RandomAccountParallel extends ScenarioBase {
 
 					try {
 						ledger.registerTransaction(new Transaction(UUID.randomUUID().toString(),
-								String.valueOf(currentExecution), LocalDateTime.now(),
+								UUID.randomUUID().toString(), LocalDateTime.now(),
 								"Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
 					} finally {
 						LOGGER.info("Processed transaction #{} in {} ms- Thread: {}", currentExecution,
