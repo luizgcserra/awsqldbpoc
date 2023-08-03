@@ -14,6 +14,7 @@ import com.example.awsqldbpoc.utils.DateTimeUtils;
 
 import io.codenotary.immudb4j.Entry;
 import io.codenotary.immudb4j.exceptions.KeyNotFoundException;
+import io.codenotary.immudb4j.exceptions.VerificationException;
 import io.codenotary.immudb4j.sql.SQLException;
 import io.micrometer.core.annotation.Timed;
 
@@ -42,19 +43,18 @@ public class BalanceRepository implements IBalanceRepository {
 		return newAmount;
 	}
 
-	private BalanceModel getCurrentBalance(final String accountId) throws NumberFormatException, SQLException {
-
-		BalanceModel balance = null;
+	private BalanceModel getCurrentBalance(final String accountId)
+			throws NumberFormatException, SQLException, VerificationException {
 
 		try {
-			Entry entry = ImmudDbSessionContext.get().get(TABLE_NAME + "#" + accountId);
+			Entry entry = ImmudDbSessionContext.get().verifiedGet(TABLE_NAME + "#" + accountId);
 
-			if (entry != null)
-				balance = (BalanceModel) SerializationUtils.deserialize(entry.getValue());
+			return (BalanceModel) SerializationUtils.deserialize(entry.getValue());
 		} catch (KeyNotFoundException e) {
+			return null;
+		} catch (VerificationException e) {
+			throw e;
 		}
-
-		return balance;
 	}
 
 }

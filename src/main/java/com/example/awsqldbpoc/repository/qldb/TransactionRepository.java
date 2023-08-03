@@ -2,6 +2,7 @@ package com.example.awsqldbpoc.repository.qldb;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -49,4 +50,15 @@ public class TransactionRepository extends QldbRepository implements ITransactio
 
 		return !result.isEmpty();
 	}
+
+	@Override
+	@Timed(value = "registerTransactionBlock", percentiles = { .5, .9, .95, .99 })
+	public boolean registerTransaction(final List<TransactionModel> transactions) throws IOException {
+
+		for (TransactionModel tx : transactions)
+			execute(INSERT_QUERY, Collections.singletonList(serialize(tx)));
+
+		return true;
+	}
+
 }

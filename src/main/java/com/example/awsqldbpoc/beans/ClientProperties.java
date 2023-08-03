@@ -12,18 +12,20 @@ public class ClientProperties {
 	private String database;
 	private String username;
 	private String password;
+	private int maxSessions;
 
 	public ClientProperties() {
 		super();
 	}
 
-	public ClientProperties(String host, int port, String database, String username, String password) {
+	public ClientProperties(String host, int port, String database, String username, String password, int maxSessions) {
 		super();
 		this.host = host;
 		this.port = port;
 		this.database = database;
 		this.username = username;
 		this.password = password;
+		this.maxSessions = maxSessions;
 	}
 
 	public String getHost() {
@@ -64,6 +66,14 @@ public class ClientProperties {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getMaxSessions() {
+		return maxSessions;
+	}
+
+	public void setMaxSessions(int maxSessions) {
+		this.maxSessions = maxSessions;
 	}
 
 }

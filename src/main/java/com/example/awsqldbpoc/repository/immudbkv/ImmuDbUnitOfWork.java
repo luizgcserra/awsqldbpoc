@@ -46,6 +46,7 @@ public class ImmuDbUnitOfWork implements UnitOfWork {
 
 		try {
 			client = immuClientPool.borrowObject();
+			
 			//client.beginTransaction();
 
 			ImmudDbSessionContext.set(client);

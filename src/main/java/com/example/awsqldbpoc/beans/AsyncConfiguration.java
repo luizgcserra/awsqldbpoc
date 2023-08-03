@@ -17,7 +17,7 @@ public class AsyncConfiguration {
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
 		threadPoolTaskExecutor.setMaxPoolSize(1500);
 		threadPoolTaskExecutor.setCorePoolSize(100);
-		threadPoolTaskExecutor.setQueueCapacity(10);
+		//threadPoolTaskExecutor.setQueueCapacity(10);
 		threadPoolTaskExecutor.setThreadNamePrefix("transaction-");
 		threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		threadPoolTaskExecutor.setDaemon(true);

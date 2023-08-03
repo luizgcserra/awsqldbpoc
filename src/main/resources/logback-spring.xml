@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property resource="application.properties" />
+	<contextName>${spring.application.name}</contextName>
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ASYNC_CONSOLE"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="Console" />
+		<queueSize>100</queueSize>
+		<includeCallerData>false</includeCallerData>
+		<neverBlock>true</neverBlock>
+		<discardingThreshold>20</discardingThreshold>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="ASYNC_CONSOLE" />
+	</root>
+
+
+</configuration>

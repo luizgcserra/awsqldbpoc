@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.annotation.Profile;
@@ -67,5 +68,10 @@ public class TransactionRepository implements ITransactionRepository {
 		GetItemResult result = dynamoDB.getItem(TABLE_NAME, attributesMap, true);
 
 		return result.getItem() != null;
+	}
+
+	@Override
+	public boolean registerTransaction(List<TransactionModel> transactions) throws Throwable {
+		throw new UnsupportedOperationException();
 	}
 }

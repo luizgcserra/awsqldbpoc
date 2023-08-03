@@ -16,17 +16,20 @@ import io.codenotary.immudb4j.ImmuClient;
 @Profile("immudb")
 @Configuration
 public class ImmuDbConfiguration {
-
+	
 	@Bean(destroyMethod = "close")
-	public ObjectPool<ImmuClient> immuClientPool(ClientProperties properties) {
+	public ObjectPool<ImmuClient> immuClientPool(ClientProperties properties) throws Exception {
 		GenericObjectPoolConfig<ImmuClient> config = new GenericObjectPoolConfig<ImmuClient>();
 		config.setJmxEnabled(false);
-		config.setMinIdle(10);
-		config.setMaxTotal(100);
+		config.setMinIdle(properties.getMaxSessions() / 2);
+		config.setMaxIdle(properties.getMaxSessions());
+		config.setMaxTotal(properties.getMaxSessions());
 		config.setMaxWait(Duration.ofMillis(100));
 		config.setBlockWhenExhausted(true);
 
-		ObjectPool<ImmuClient> pool = new GenericObjectPool<ImmuClient>(new ClientObjectFactory(properties), config);
+		GenericObjectPool<ImmuClient> pool = new GenericObjectPool<ImmuClient>(new ClientObjectFactory(properties), config);
+
+		pool.addObjects(properties.getMaxSessions());
 
 		return pool;
 	}

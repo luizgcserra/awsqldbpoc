@@ -1,11 +1,14 @@
 package com.example.awsqldbpoc.service;
 
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.awsqldbpoc.domain.Balance;
 import com.example.awsqldbpoc.domain.Transaction;
+import com.example.awsqldbpoc.domain.TransactionBlock;
 import com.example.awsqldbpoc.models.BalanceModel;
 import com.example.awsqldbpoc.models.TransactionModel;
 import com.example.awsqldbpoc.repository.UnitOfWork;
@@ -43,6 +46,32 @@ public class Ledger {
 							updatedBalance.getAvailableAmount());
 				} else
 					return null;
+			} catch (Throwable e) {
+				LOGGER.error("Register Transaction failed", e);
+				throw new RuntimeException(e);
+			}
+		});
+	}
+
+	@Timed(value = "registerTransactionBlock", percentiles = { .5, .9, .95, .99 })
+	public Balance registerTransaction(TransactionBlock transactionBlock) {
+		return this.unitOfWork.execute(context -> {
+			try {
+				context.transactionRepository()
+						.registerTransaction(transactionBlock.getAccountTransactions().stream()
+								.map(transaction -> new TransactionModel(transaction.getAccountId(),
+										transaction.getTransactionId(), transaction.getUniqueId(),
+										DateTimeUtils.toEpochMillis(transaction.getTransactionDate()),
+										transaction.getDescription(), transaction.getTransactionAmount()))
+								.collect(Collectors.toList()));
+
+				BalanceModel updatedBalance = context.balanceRepository().updateBalance(transactionBlock.getAccountId(),
+						transactionBlock.getTotalAmount());
+
+				return new Balance(updatedBalance.getAccountId(),
+						DateTimeUtils.toLocalDateTime(updatedBalance.getBalanceDate()),
+						updatedBalance.getAvailableAmount());
+
 			} catch (Throwable e) {
 				LOGGER.error("Register Transaction failed", e);
 				throw new RuntimeException(e);
