@@ -39,7 +39,7 @@ public class SameAccountSerial extends ScenarioBase {
 		try {
 			for (int i = 1; i <= transactionsCount; i++) {
 				long currentAccountDate = System.currentTimeMillis();
-				Transaction transaction = new Transaction(accountId, String.valueOf(i), LocalDateTime.now(),
+				Transaction transaction = new Transaction(accountId, UUID.randomUUID().toString(), LocalDateTime.now(),
 						"Transaction Test " + i, BigDecimal.valueOf(1));
 
 				ledger.registerTransaction(transaction);
