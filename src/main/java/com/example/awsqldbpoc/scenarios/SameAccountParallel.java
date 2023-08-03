@@ -59,7 +59,7 @@ public class SameAccountParallel extends ScenarioBase {
 					long currentExecutionTime = System.currentTimeMillis();
 
 					try {
-						ledger.registerTransaction(new Transaction(accountId, UUID.randomUUID().toString(),
+						ledger.register(new Transaction(accountId, UUID.randomUUID().toString(),
 								LocalDateTime.now(), "Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
 					} finally {
 						LOGGER.info("Processed transaction #{} in {} ms - Thread: {}", currentExecution,

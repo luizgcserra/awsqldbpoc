@@ -28,8 +28,8 @@ public class Ledger {
 		this.unitOfWork = unitOfWork;
 	}
 
-	@Timed(value = "registerTransaction", percentiles = { .5, .9, .95, .99 })
-	public Balance registerTransaction(Transaction transaction) {
+	@Timed(value = "register", percentiles = { .5, .9, .95, .99 })
+	public Balance register(Transaction transaction) {
 		return this.unitOfWork.execute(context -> {
 			try {
 				if (context.transactionRepository()
@@ -53,8 +53,8 @@ public class Ledger {
 		});
 	}
 
-	@Timed(value = "registerTransactionBlock", percentiles = { .5, .9, .95, .99 })
-	public Balance registerTransaction(TransactionBlock transactionBlock) {
+	@Timed(value = "registerBlock", percentiles = { .5, .9, .95, .99 })
+	public Balance register(TransactionBlock transactionBlock) {
 		return this.unitOfWork.execute(context -> {
 			try {
 				context.transactionRepository()

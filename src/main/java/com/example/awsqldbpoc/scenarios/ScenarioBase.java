@@ -1,7 +1,5 @@
 package com.example.awsqldbpoc.scenarios;
 
-import java.time.Duration;
-
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -10,12 +8,14 @@ public abstract class ScenarioBase implements ApplicationListener<ApplicationRea
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		try {
+			this.sleep(2);
+
 			System.out.println();
 			System.out.println();
 			System.out.println("Waiting for metrics to be sent to CloudWatch");
 			System.out.println();
 
-			this.sleep();
+			this.sleep(80);
 
 			System.exit(0);
 		} catch (Exception e) {
@@ -23,8 +23,8 @@ public abstract class ScenarioBase implements ApplicationListener<ApplicationRea
 		}
 	}
 
-	private void sleep() throws InterruptedException {
-		Thread.sleep((long) Duration.ofSeconds(80).toMillis());
+	private void sleep(long seconds) throws InterruptedException {
+		Thread.sleep(seconds * 1000);
 	}
 
 }

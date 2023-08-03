@@ -42,7 +42,7 @@ public class SameAccountSerial extends ScenarioBase {
 				Transaction transaction = new Transaction(accountId, UUID.randomUUID().toString(), LocalDateTime.now(),
 						"Transaction Test " + i, BigDecimal.valueOf(1));
 
-				ledger.registerTransaction(transaction);
+				ledger.register(transaction);
 
 				LOGGER.info("Processed transaction #{} in {} ms - UniqueId: {}", i,
 						(System.currentTimeMillis() - currentAccountDate), transaction.getUniqueId());

@@ -65,7 +65,7 @@ public class SameAccountBatch extends ScenarioBase {
 					processedItems++;
 				}
 
-				ledger.registerTransaction(new TransactionBlock(accountId, transactions));
+				ledger.register(new TransactionBlock(accountId, transactions));
 
 				elapsedTime = (System.currentTimeMillis() - currentAccountDate);
 

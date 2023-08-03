@@ -58,9 +58,8 @@ public class RandomAccountParallel extends ScenarioBase {
 					long currentExecutionTime = System.currentTimeMillis();
 
 					try {
-						ledger.registerTransaction(new Transaction(UUID.randomUUID().toString(),
-								UUID.randomUUID().toString(), LocalDateTime.now(),
-								"Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
+						ledger.register(new Transaction(UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+								LocalDateTime.now(), "Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
 					} finally {
 						LOGGER.info("Processed transaction #{} in {} ms- Thread: {}", currentExecution,
 								(System.currentTimeMillis() - currentExecutionTime), Thread.currentThread().getName());

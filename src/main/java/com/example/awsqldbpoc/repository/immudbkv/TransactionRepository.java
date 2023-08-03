@@ -29,6 +29,7 @@ public class TransactionRepository implements ITransactionRepository {
 	}
 
 	@Override
+	@Timed(value = "registerTransactionBlock", percentiles = { .5, .9, .95, .99 })
 	public boolean registerTransaction(List<TransactionModel> transactions) throws Throwable {
 		KVListBuilder kvListBuilder = KVListBuilder.newBuilder();
 
