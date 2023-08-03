@@ -4,8 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties("immudb")
-public class ClientProperties {
+@ConfigurationProperties("sqlserver")
+public class SqlClientProperties {
 
 	private String host;
 	private int port;
@@ -14,11 +14,13 @@ public class ClientProperties {
 	private String password;
 	private int maxSessions;
 
-	public ClientProperties() {
+	public SqlClientProperties() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public ClientProperties(String host, int port, String database, String username, String password, int maxSessions) {
+	public SqlClientProperties(String host, int port, String database, String username, String password,
+			int maxSessions) {
 		super();
 		this.host = host;
 		this.port = port;

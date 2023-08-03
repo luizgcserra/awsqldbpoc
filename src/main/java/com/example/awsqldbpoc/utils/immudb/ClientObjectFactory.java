@@ -4,15 +4,15 @@ import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 
-import com.example.awsqldbpoc.beans.ClientProperties;
+import com.example.awsqldbpoc.beans.ImmuClientProperties;
 
 import io.codenotary.immudb4j.ImmuClient;
 
 public class ClientObjectFactory extends BasePooledObjectFactory<ImmuClient> {
 
-	private final ClientProperties properties;
+	private final ImmuClientProperties properties;
 
-	public ClientObjectFactory(ClientProperties properties) {
+	public ClientObjectFactory(ImmuClientProperties properties) {
 		this.properties = properties;
 	}
 

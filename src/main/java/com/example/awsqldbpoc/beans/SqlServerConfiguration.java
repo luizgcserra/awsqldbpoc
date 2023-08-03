@@ -1,5 +1,6 @@
 package com.example.awsqldbpoc.beans;
 
+import java.sql.Connection;
 import java.time.Duration;
 
 import org.apache.commons.pool2.ObjectPool;
@@ -9,28 +10,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.example.awsqldbpoc.utils.immudb.ClientObjectFactory;
+import com.example.awsqldbpoc.utils.sqlserver.ClientObjectFactory;
 
-import io.codenotary.immudb4j.ImmuClient;
-
-@Profile("immudb")
+@Profile("sqlserver")
 @Configuration
-public class ImmuDbConfiguration {
-	
+public class SqlServerConfiguration {
+
 	@Bean(destroyMethod = "close")
-	public ObjectPool<ImmuClient> immuClientPool(ImmuClientProperties properties) throws Exception {
-		GenericObjectPoolConfig<ImmuClient> config = new GenericObjectPoolConfig<ImmuClient>();
+	public ObjectPool<Connection> sqlClientPool(SqlClientProperties properties) throws Exception {
+		GenericObjectPoolConfig<Connection> config = new GenericObjectPoolConfig<Connection>();
 		config.setJmxEnabled(false);
 		config.setMinIdle(properties.getMaxSessions() / 2);
 		config.setMaxIdle(properties.getMaxSessions());
 		config.setMaxTotal(properties.getMaxSessions());
-		config.setMaxWait(Duration.ofMillis(100));
+		config.setMaxWait(Duration.ofSeconds(10));
 		config.setBlockWhenExhausted(true);
 
-		GenericObjectPool<ImmuClient> pool = new GenericObjectPool<ImmuClient>(new ClientObjectFactory(properties), config);
+		GenericObjectPool<Connection> pool = new GenericObjectPool<Connection>(new ClientObjectFactory(properties),
+				config);
 
 		pool.addObjects(properties.getMaxSessions());
 
 		return pool;
 	}
+
 }
