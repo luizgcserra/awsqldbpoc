@@ -25,12 +25,12 @@ public class BalanceRepository extends QldbRepository implements IBalanceReposit
 
 	private static final String UPDATE_QUERY = String.format(
 			"UPDATE %s AS b SET b.BalanceDate = ?, b.AvailableAmount = ? WHERE b.AccountId = ?",
-			Constants.BALANCE_TABLE_NAME);
+			BALANCE_TABLE_NAME);
 
 	private static final String SELECT_QUERY = String.format("SELECT %s FROM %s WHERE AccountId = ?",
-			Constants.AVAILABLE_AMOUNT_FIELD_NAME, Constants.BALANCE_TABLE_NAME);
+			AVAILABLE_AMOUNT_FIELD_NAME, BALANCE_TABLE_NAME);
 
-	private static final String INSERT_QUERY = String.format("INSERT INTO %s ?", Constants.BALANCE_TABLE_NAME);
+	private static final String INSERT_QUERY = String.format("INSERT INTO %s ?", BALANCE_TABLE_NAME);
 
 	@Override
 	@Timed(value = "updateBalance", percentiles = { .5, .9, .95, .99 })

@@ -31,6 +31,9 @@ public class SameAccountBatch extends ScenarioBase {
 	@Value("${transactions-block-size:30}")
 	private int transactionBlockSize;
 
+	@Value("${spring.profiles.active:Unknown}")
+	private String activeProfile;
+
 	public SameAccountBatch(Ledger ledger) {
 		super();
 		this.ledger = ledger;
@@ -40,26 +43,33 @@ public class SameAccountBatch extends ScenarioBase {
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		LOGGER.info("SameAccountBatch: {} transactions", transactionsCount);
 
+		if (activeProfile.contains("qldb") && transactionBlockSize > 30)
+			transactionBlockSize = 30;
+		else if (activeProfile.contains("dynamo") && transactionBlockSize > 25)
+			transactionBlockSize = 25;
+
 		long currentDate = System.currentTimeMillis();
 		String accountId = UUID.randomUUID().toString();
 		long elapsedTime;
+		long processedItems = 0;
+		long blockCount = 0;
 
 		try {
-			for (int j = 0; j < (int) Math.round(((double) transactionsCount / transactionBlockSize) + 0.5d); j++) {
+			while (processedItems < transactionsCount) {
 				List<Transaction> transactions = new ArrayList<>(transactionsCount);
 				long currentAccountDate = System.currentTimeMillis();
 
 				for (int i = 1; i <= transactionBlockSize; i++) {
 					transactions.add(new Transaction(accountId, UUID.randomUUID().toString(), LocalDateTime.now(),
-							"Transaction Test " + i * j, BigDecimal.valueOf(1)));
-
+							"Transaction Test " + processedItems, BigDecimal.valueOf(1)));
+					processedItems++;
 				}
 
 				ledger.registerTransaction(new TransactionBlock(accountId, transactions));
 
 				elapsedTime = (System.currentTimeMillis() - currentAccountDate);
 
-				LOGGER.info("Processed transaction #{} in {} ms. Items: {} - rps: {}", j, elapsedTime,
+				LOGGER.info("Processed transaction #{} in {} ms. Items: {} - tps: {}", ++blockCount, elapsedTime,
 						transactions.size(), 1000.0 / ((double) elapsedTime / (double) transactions.size()));
 			}
 		} catch (Exception e) {

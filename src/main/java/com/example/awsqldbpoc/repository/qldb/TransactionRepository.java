@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -19,10 +20,12 @@ import software.amazon.qldb.Result;
 @Repository
 public class TransactionRepository extends QldbRepository implements ITransactionRepository {
 
-	private static final String INSERT_QUERY = String.format("INSERT INTO %s ? ", Constants.TRANSACTION_TABLE_NAME);
+	private static final String INSERT_QUERY = String.format("INSERT INTO %s ? ", TRANSACTION_TABLE_NAME);
 	private static final String SELECT_QUERY = String.format("SELECT %s FROM %s WHERE %s = ?",
-			Constants.TRANSACTION_UNIQUEID_FIELD_NAME, Constants.TRANSACTION_TABLE_NAME,
-			Constants.TRANSACTION_UNIQUEID_FIELD_NAME);
+			TRANSACTION_UNIQUEID_FIELD_NAME, TRANSACTION_TABLE_NAME, TRANSACTION_UNIQUEID_FIELD_NAME);
+
+	@Value("${qldb.idempotent:false}")
+	private boolean idempotent;
 
 	@Override
 	@Timed(value = "registerTransaction", percentiles = { .5, .9, .95, .99 })
@@ -45,10 +48,12 @@ public class TransactionRepository extends QldbRepository implements ITransactio
 	}
 
 	private boolean exists(final String transactionUniqueId) throws IOException {
+		if (idempotent) {
+			final Result result = execute(SELECT_QUERY, Constants.SYSTEM.newString(transactionUniqueId));
 
-		final Result result = execute(SELECT_QUERY, Constants.SYSTEM.newString(transactionUniqueId));
-
-		return !result.isEmpty();
+			return !result.isEmpty();
+		} else
+			return false;
 	}
 
 	@Override

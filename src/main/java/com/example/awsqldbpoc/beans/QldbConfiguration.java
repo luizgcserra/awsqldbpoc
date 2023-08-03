@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.example.awsqldbpoc.utils.qldb.Constants;
-
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.qldbsession.QldbSessionClient;
 import software.amazon.awssdk.services.qldbsession.QldbSessionClientBuilder;
@@ -27,10 +25,16 @@ public class QldbConfiguration {
 	@Value("${max-concurrent-transactions:1000}")
 	private int maxConcurrentTransactions;
 
+	@Value("${qldb.name}")
+	private String ledgerName;
+
+	@Value("${qldb.rety-limit:99}")
+	private int retryLimit;
+
 	@Bean(destroyMethod = "close")
 	public QldbDriver amazonQldbDriver(QldbSessionClientBuilder sessionBuilder) {
-		return QldbDriver.builder().ledger(Constants.LEDGER_NAME).transactionRetryPolicy(
-				RetryPolicy.builder().maxRetries(Constants.RETRY_LIMIT).backoffStrategy(new BackoffStrategy() {
+		return QldbDriver.builder().ledger(ledgerName).transactionRetryPolicy(
+				RetryPolicy.builder().maxRetries(retryLimit).backoffStrategy(new BackoffStrategy() {
 
 					@Override
 					public Duration calculateDelay(RetryPolicyContext arg0) {

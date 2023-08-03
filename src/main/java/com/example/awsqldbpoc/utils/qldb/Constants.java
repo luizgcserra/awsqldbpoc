@@ -7,13 +7,7 @@ import com.fasterxml.jackson.dataformat.ion.IonObjectMapper;
 import com.fasterxml.jackson.dataformat.ion.ionvalue.IonValueMapper;
 
 public final class Constants {
-	public static final int RETRY_LIMIT = 99999;
-	public static final String LEDGER_NAME = "myledger";
-	public static final String BALANCE_TABLE_NAME = "balances";
-	public static final String TRANSACTION_TABLE_NAME = "transactions";
-	public static final String USER_TABLES = "information_schema.user_tables";
-	public static final String AVAILABLE_AMOUNT_FIELD_NAME = "AvailableAmount";
-	public static final String TRANSACTION_UNIQUEID_FIELD_NAME = "UniqueId";
+	
 	public static final IonSystem SYSTEM = IonSystemBuilder.standard().build();
 	public static final IonObjectMapper MAPPER = new IonValueMapper(SYSTEM);
 
