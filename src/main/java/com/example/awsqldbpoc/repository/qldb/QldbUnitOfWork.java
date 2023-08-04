@@ -51,4 +51,9 @@ public class QldbUnitOfWork implements UnitOfWork {
 		});
 	}
 
+	@Override
+	public String getRepositoryType() {
+		return "QLDB";
+	}
+
 }

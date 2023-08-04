@@ -59,8 +59,8 @@ public class SameAccountParallel extends ScenarioBase {
 					long currentExecutionTime = System.currentTimeMillis();
 
 					try {
-						ledger.register(new Transaction(accountId, UUID.randomUUID().toString(),
-								LocalDateTime.now(), "Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
+						ledger.register(new Transaction(accountId, UUID.randomUUID().toString(), LocalDateTime.now(),
+								"Transaction Test " + currentExecution, BigDecimal.valueOf(1)));
 					} finally {
 						LOGGER.info("Processed transaction #{} in {} ms - Thread: {}", currentExecution,
 								(System.currentTimeMillis() - currentExecutionTime), Thread.currentThread().getName());
@@ -77,7 +77,10 @@ public class SameAccountParallel extends ScenarioBase {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		} finally {
-			LOGGER.info("Process finished: {} ms", (System.currentTimeMillis() - currentDate));
+			double totalTime = System.currentTimeMillis() - currentDate;
+
+			LOGGER.info("Process finished: {} ms - AVG TPS: {}", totalTime,
+					1000.0 / (totalTime / (double) transactionsCount));
 			super.onApplicationEvent(event);
 		}
 	}

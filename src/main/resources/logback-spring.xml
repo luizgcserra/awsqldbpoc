@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<property resource="application.properties" />
+	<springProperty scope="context" name="ACTIVE_PROFILE"
+		source="spring.profiles.active" />
 	<contextName>${spring.application.name}</contextName>
+	
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [${ACTIVE_PROFILE}] - %msg%n</pattern>
 		</encoder>
 	</appender>
+	<appender name="File" class="ch.qos.logback.core.FileAppender">
+      <file>${LOG_FILE_NAME}</file>
+      <append>false</append>
+      <encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [${ACTIVE_PROFILE}] - %msg%n</pattern>
+      </encoder>
+   </appender>
 
 	<appender name="ASYNC_CONSOLE"
 		class="ch.qos.logback.classic.AsyncAppender">
 		<appender-ref ref="Console" />
-		<queueSize>100</queueSize>
+		<queueSize>200</queueSize>
+		<includeCallerData>false</includeCallerData>
+		<neverBlock>true</neverBlock>
+		<discardingThreshold>20</discardingThreshold>
+	</appender>
+	<appender name="ASYNC_FILE"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="File" />
+		<queueSize>200</queueSize>
 		<includeCallerData>false</includeCallerData>
 		<neverBlock>true</neverBlock>
 		<discardingThreshold>20</discardingThreshold>
@@ -21,6 +38,7 @@
 
 	<root level="info">
 		<appender-ref ref="ASYNC_CONSOLE" />
+		<appender-ref ref="ASYNC_FILE" />
 	</root>
 
 

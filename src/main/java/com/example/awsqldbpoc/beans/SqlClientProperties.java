@@ -16,7 +16,6 @@ public class SqlClientProperties {
 
 	public SqlClientProperties() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public SqlClientProperties(String host, int port, String database, String username, String password,

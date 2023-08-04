@@ -71,7 +71,7 @@ public class BalanceRepository implements IBalanceRepository {
 			return null;
 		else {
 			return new BalanceModel(accountId, Long.parseLong(result.getItem().get("balanceDate").getN()),
-					BigDecimal.valueOf(Long.parseLong(result.getItem().get("availableAmount").getN())));
+					Double.parseDouble((result.getItem().get("availableAmount").getN())));
 		}
 	}
 

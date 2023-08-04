@@ -11,5 +11,7 @@ public interface UnitOfWork {
 	ITransactionRepository transactionRepository();
 
 	Balance execute(Function<UnitOfWork, Balance> action);
+	
+	String getRepositoryType();
 
 }

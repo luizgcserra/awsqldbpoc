@@ -16,12 +16,12 @@ public class DynamoConfiguration {
 	@Value("${cloud.aws.region}")
 	private String region;
 
-	@Bean
+	@Bean(destroyMethod = "shutdown")
 	public AmazonDynamoDB amazonDynamoDB() {
 		return AmazonDynamoDBClientBuilder.standard().withRegion(this.region).build();
 	}
 
-	@Bean
+	@Bean(destroyMethod = "shutdown")
 	public DynamoDB dynamoDB(AmazonDynamoDB amazonDynamoDB) {
 		return new DynamoDB(amazonDynamoDB);
 	}

@@ -77,4 +77,9 @@ public class ImmuDbUnitOfWork implements UnitOfWork {
 		}
 	}
 
+	@Override
+	public String getRepositoryType() {
+		return "Immudb Sql";
+	}
+
 }

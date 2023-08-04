@@ -38,4 +38,9 @@ public class DynamoUnitOfWork implements UnitOfWork {
 		return action.apply(this);
 	}
 
+	@Override
+	public String getRepositoryType() {
+		return "DynamoDb";
+	}
+
 }

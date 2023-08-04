@@ -11,21 +11,19 @@ import com.example.awsqldbpoc.beans.SqlClientProperties;
 
 public class ClientObjectFactory extends BasePooledObjectFactory<Connection> {
 
-	private final SqlClientProperties properties;
+	private final String connectionString;
 
 	public ClientObjectFactory(SqlClientProperties properties) {
-		this.properties = properties;
+		this.connectionString = String.format(
+				"jdbc:sqlserver://%s:%s;database=%s;user=%s;password=%s;encrypt=false;trustServerCertificate=false;loginTimeout=10;",
+				properties.getHost(), properties.getPort(), properties.getDatabase(), properties.getUsername(),
+				properties.getPassword());
 	}
 
 	@Override
 	public Connection create() throws Exception {
 
-		String connectionUrl = String.format(
-				"jdbc:sqlserver://%s:%s;database=%s;user=%s;password=%s;encrypt=false;trustServerCertificate=false;loginTimeout=10;",
-				properties.getHost(), properties.getPort(), properties.getDatabase(), properties.getUsername(),
-				properties.getPassword());
-
-		return DriverManager.getConnection(connectionUrl);
+		return DriverManager.getConnection(connectionString);
 	}
 
 	@Override

@@ -57,10 +57,11 @@ public class SqlServerDbUnitOfWork implements UnitOfWork {
 			try {
 				client.rollback();
 			} catch (Exception e1) {
-				try {
-					sqlClientPool.invalidateObject(client);
-				} catch (Exception e2) {
-				}
+
+			}
+			try {
+				sqlClientPool.invalidateObject(client);
+			} catch (Exception e2) {
 			}
 
 			throw new RuntimeException(e);
@@ -74,6 +75,11 @@ public class SqlServerDbUnitOfWork implements UnitOfWork {
 					e.printStackTrace();
 				}
 		}
+	}
+
+	@Override
+	public String getRepositoryType() {
+		return "Sql Server";
 	}
 
 }

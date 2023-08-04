@@ -75,8 +75,10 @@ public class SameAccountBatch extends ScenarioBase {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		} finally {
-			LOGGER.info("Process finished: {} ms - AccountID: {}", (System.currentTimeMillis() - currentDate),
-					accountId);
+			double totalTime = System.currentTimeMillis() - currentDate;
+
+			LOGGER.info("Process finished: {} ms - AccountID: {} - AVG TPS: {}", totalTime, accountId,
+					1000.0 / (totalTime / (double) transactionsCount));
 			super.onApplicationEvent(event);
 		}
 	}

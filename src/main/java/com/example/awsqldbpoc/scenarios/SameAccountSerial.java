@@ -50,7 +50,10 @@ public class SameAccountSerial extends ScenarioBase {
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		} finally {
-			LOGGER.info("Process finished: {} ms", (System.currentTimeMillis() - currentDate));
+			double totalTime = System.currentTimeMillis() - currentDate;
+
+			LOGGER.info("Process finished: {} ms - AVG TPS: {}", totalTime,
+					1000.0 / (totalTime / (double) transactionsCount));
 			super.onApplicationEvent(event);
 		}
 	}
