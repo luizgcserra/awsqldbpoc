@@ -69,7 +69,7 @@ In SQL Server you can achieve better results on faster SSD disks.
 
 ## Results
 
-All execution logs can be seen in [logs](./benchmark/logs)
+All execution logs can be seen [here](./benchmark/logs)
 
 ### Random Account Parallel
 
