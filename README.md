@@ -8,6 +8,7 @@ Attention: DynamoDB is not an immutable database and was considered in the exper
 ### Whats is immutable data? 
 
 Immutable data is a piece of information in a database that cannot be (or shouldn’t be) deleted or modified. Most traditional databases store data in a mutable format, meaning the database overwrites the older data when new data is available: https://www.tibco.com/reference-center/what-is-immutable-data
+
 ## Test scenarios
 
 For this experiment, we did not consider concurrent requests from the same account. This scenario does not work well with any of the chosen technologies as it requires a transactional context generating locks.
@@ -61,6 +62,11 @@ CREATE INDEX ON transactions (UniqueId)
 
 - ImmuDB: Image 'codenotary/immudb:latest' was used in an ECS Fargate service with 2 vCPU and 4 GB RAM
 - Microsoft SQL Server 2022 Ledger Tables: until the end of testing AWS still did not support SQL Server 2022 version on RDS. The tests were performed on an EC2 m5.large gp3 EBS with the AMI Ubuntu Server 20.04 LTS (HVM) with SQL Server 2022 Standard
+
+No configurations or optimizations were made to the tested infrastructure and products.
+
+In SQL Server you can achieve better results on faster SSD disks.
+
 ## Results
 
 All execution logs can be seen in [logs](./benchmark/logs)
