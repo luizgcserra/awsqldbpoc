@@ -69,21 +69,21 @@ In SQL Server you can achieve better results on faster SSD disks.
 
 ## Results
 
-All execution logs can be seen [here](./benchmark/logs)
+Tests were performed with 20,000 samples for each technology and scenario. All execution logs can be seen [here](./benchmark/logs)
 
-### Random Account Parallel
+#### Random Account Parallel
 
 ![Random Account Parallel Total Time](benchmark/random_account_parallel_databases_total_time.png)
 
 ![Random Account Parallel Avg Tps](benchmark/random_account_parallel_databases_avg_tps.png)
 
-### Same Account Serial
+#### Same Account Serial
 
 ![Same Account Serial Total Time](benchmark/same_account_serial_databases_total_time.png)
 
 ![Same Account Serial Avg Tps](benchmark/same_account_serial_databases_avg_tps.png)
 
-### Same Account Batch
+#### Same Account Batch
 
 ![Same Account Batch Total Time](benchmark/same_account_batch_databases_total_time.png)
 
