@@ -17,9 +17,9 @@ In the real world, these entries would be processed from a stream technology, su
 
 This test consists of evaluating the behavior of the different technologies chosen in three scenarios of persistence of financial transactions and updating of the balance of a bank account:
 
-- Random Account Parallel: this scenario consists of the persistence of a balance for different accounts executed by N threads in order to observe the behavior of technologies with parallelism.
-- Same Account Serial: este cenário consiste na persistencia de diversos saldos para uma mesma conta.
-- Same Account Batch: this scenario consists of persisting several balances for the same account performing the persistence in batches in order to verify possible performance gains.
+- Random Account Parallel: this scenario consists of the persistence of transacion and balance for different accounts executed by N threads in order to observe the behavior of technologies with parallelism.
+- Same Account Serial: this scenario consists of the persistence of several transactions and updating of balances for the same account.
+- Same Account Batch: this scenario consists of persisting several transactions and balances for the same account performing the persistence in batches in order to verify possible performance gains.
 
 
 ## Technologies
