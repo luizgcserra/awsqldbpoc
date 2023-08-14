@@ -17,7 +17,7 @@ In the real world, these entries would be processed from a stream technology, su
 
 This test consists of evaluating the behavior of the different technologies chosen in three scenarios of persistence of financial transactions and updating of the balance of a bank account:
 
-- Random Account Parallel: this scenario consists of the persistence of transacion and balance for different accounts executed by N threads in order to observe the behavior of technologies with parallelism.
+- Random Account Parallel: this scenario consists of the persistence of transacion and balance for different accounts executed by N threads in order to observe the behavior of technologies with concurrency.
 - Same Account Serial: this scenario consists of the persistence of several transactions and updating of balances for the same account.
 - Same Account Batch: this scenario consists of persisting several transactions and balances for the same account performing the persistence in batches in order to verify possible performance gains.
 
@@ -38,7 +38,7 @@ For this experiment, we implemented a Spring Boot application with different Ada
 
 #### Notes: 
 
-In this experiment, issues of idempotency were not considered.
+In this experiment idempotency requirements were not considered.
 
 Idempotency support:
 - Amazon DynamoDB: Allow to implicitly insert or update data, balance update requires running in a transactional context.
@@ -51,7 +51,7 @@ The number of test samples was initially set to 100,000. For some technologies, 
 
 ### Infrastructure used
 
-- Spring Boot application: released on an EC2 t2.micro with java-11-amazon-corretto.
+- Spring Boot application: lauched on an EC2 t2.micro with java-11-amazon-corretto.
 - Amazon DynamoDB: it is a managed service. Tables were configured in the On-Demand capacity model.
 - Amazon Quantum Ledger Database (QLDB): it is a managed service. Indexes were created for the Transactions and Balances tables:
 
@@ -63,7 +63,7 @@ CREATE INDEX ON transactions (UniqueId)
 - ImmuDB: Image 'codenotary/immudb:latest' was used in an ECS Fargate service with 2 vCPU and 4 GB RAM
 - Microsoft SQL Server 2022 Ledger Tables: until the end of testing AWS still did not support SQL Server 2022 version on RDS. The tests were performed on an EC2 m5.large gp3 EBS with the AMI Ubuntu Server 20.04 LTS (HVM) with SQL Server 2022 Standard
 
-No configurations or optimizations were made to the tested infrastructure and products.
+No configurations or optimizations were made to the tested infrastructure and products running with your defaults settings.
 
 In SQL Server you can achieve better results on faster SSD disks.
 
