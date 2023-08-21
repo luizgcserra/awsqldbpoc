@@ -106,9 +106,15 @@ All data is also stored in "technical tables" containing the different versions 
 ImmuDB is a project that I believe will grow a lot and already has robust resources ensuring resilience, flexibility and high performance to be used productively.
 
 
+The time for executing persistence operations in batches proved to be quite efficient, while single operations do not perform well.
+
+
 There are two ways to work with ImmuDB, key/value and SQL (similar to T-SQL). Some features in the SQL-compatible API are not as evolved and do not deliver the same capabilities as the key/value model when performing an audit and checking the history of data changes or even querying the state of information in a certain moment.
 
 
-QLDB is a managed product which greatly facilitates its operation, but I missed having visibility and access to capacity model configurations in order to leave RCU/WCU provisioned and assess whether it would bring improvements in response times. I found its simple usage and the information tracking resources in auditing and integrity verification processes is very complete.
+QLDB is a managed product which makes its operation extremely simple, but I missed configurations of capacity model and provisioning of RCU/WCU (as well as DynamoDB has) in order to evaluate the consumption of database resources and if eventually by allocating more resources we would achieve better response times.
+
+
+Its use is very simple and it has powerful resources for tracking information in audit processes and integrity verification, however, response times for transactional or high-volume systems are a very critical point to be considered when adopting the tool.
 
 
