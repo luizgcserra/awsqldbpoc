@@ -1,4 +1,3 @@
-
 # Immutable Databases Benchmark
 
 This experiment aims to compare the performance of a set of technologies that support immutability, traceability and verifiable data integrity.
@@ -8,6 +7,7 @@ Attention: DynamoDB is not an immutable database and was considered in the exper
 ### Whats is immutable data? 
 
 Immutable data is a piece of information in a database that cannot be (or shouldn’t be) deleted or modified. Most traditional databases store data in a mutable format, meaning the database overwrites the older data when new data is available: https://www.tibco.com/reference-center/what-is-immutable-data
+
 ## Test scenarios
 
 For this experiment, we did not consider concurrent requests from the same account. This scenario does not work well with any of the chosen technologies as it requires a transactional context generating locks.
@@ -16,9 +16,9 @@ In the real world, these entries would be processed from a stream technology, su
 
 This test consists of evaluating the behavior of the different technologies chosen in three scenarios of persistence of financial transactions and updating of the balance of a bank account:
 
-- Random Account Parallel: this scenario consists of the persistence of a balance for different accounts executed by N threads in order to observe the behavior of technologies with parallelism.
-- Same Account Serial: este cenário consiste na persistencia de diversos saldos para uma mesma conta.
-- Same Account Batch: this scenario consists of persisting several balances for the same account performing the persistence in batches in order to verify possible performance gains.
+- Random Account Parallel: this scenario consists of the persistence of transacion and balance for different accounts executed by N threads in order to observe the behavior of technologies with concurrency.
+- Same Account Serial: this scenario consists of the persistence of several transactions and updating of balances for the same account.
+- Same Account Batch: this scenario consists of persisting several transactions and balances for the same account performing the persistence in batches in order to verify possible performance gains.
 
 
 ## Technologies
@@ -41,7 +41,7 @@ Tested databases ran with their default settings without any enhancements. No en
 
 #### Notes: 
 
-In this experiment, idempotency treatments were not considered.
+In this experiment idempotency requirements were not considered.
 
 Idempotency support:
 - Amazon DynamoDB: Allow to implicitly insert or update data, balance update requires running in a transactional context.
@@ -56,7 +56,7 @@ The number of test samples was initially set to 100,000. For some technologies, 
 
 ### Infrastructure used
 
-- Spring Boot application: released on an EC2 t2.micro with java-11-amazon-corretto.
+- Spring Boot application: lauched on an EC2 t2.micro with java-11-amazon-corretto.
 - Amazon DynamoDB: it is a managed service. Tables were configured in the On-Demand capacity model.
 - Amazon Quantum Ledger Database (QLDB): it is a managed service. Indexes were created for the Transactions and Balances tables:
 
@@ -67,23 +67,28 @@ CREATE INDEX ON transactions (UniqueId)
 
 - ImmuDB: Image 'codenotary/immudb:latest' was used in an ECS Fargate service with 2 vCPU and 4 GB RAM
 - Microsoft SQL Server 2022 Ledger Tables: until the end of testing AWS still did not support SQL Server 2022 version on RDS. The tests were performed on an EC2 m5.large gp3 EBS with the AMI Ubuntu Server 20.04 LTS (HVM) with SQL Server 2022 Standard
+
+No configurations or optimizations were made to the tested infrastructure and products running with your defaults settings.
+
+In SQL Server you can achieve better results on faster SSD disks.
+
 ## Results
 
-All execution logs can be seen in [logs](./benchmark/logs)
+Tests were performed with 20,000 samples for each technology and scenario. All execution logs can be seen [here](./benchmark/logs)
 
-### Random Account Parallel
+#### Random Account Parallel
 
 ![Random Account Parallel Total Time](benchmark/random_account_parallel_databases_total_time.png)
 
 ![Random Account Parallel Avg Tps](benchmark/random_account_parallel_databases_avg_tps.png)
 
-### Same Account Serial
+#### Same Account Serial
 
 ![Same Account Serial Total Time](benchmark/same_account_serial_databases_total_time.png)
 
 ![Same Account Serial Avg Tps](benchmark/same_account_serial_databases_avg_tps.png)
 
-### Same Account Batch
+#### Same Account Batch
 
 ![Same Account Batch Total Time](benchmark/same_account_batch_databases_total_time.png)
 
