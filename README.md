@@ -66,7 +66,7 @@ CREATE INDEX ON transactions (UniqueId)
 ```
 
 - ImmuDB: Image 'codenotary/immudb:latest' was used in an ECS Fargate service with 2 vCPU and 4 GB RAM
-- Microsoft SQL Server 2022 Ledger Tables: until the end of testing AWS still did not support SQL Server 2022 version on RDS. The tests were performed on an EC2 m5.large gp3 EBS with the AMI Ubuntu Server 20.04 LTS (HVM) with SQL Server 2022 Standard
+- Microsoft SQL Server 2022 Ledger Tables: until the end of testing AWS still did not support SQL Server 2022 version on RDS. The tests were performed on an EC2 m5.large with gp3 EBS running the AMI Ubuntu Server 20.04 LTS (HVM) with SQL Server 2022 Standard
 
 No configurations or optimizations were made to the tested infrastructure and products running with your defaults settings.
 
