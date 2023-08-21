@@ -35,9 +35,13 @@ For the experiment we selected 5 technologies:
 
 For this experiment, we implemented a Spring Boot application with different Adapters for each technology and executed based on the profile determined at startup.
 
+
+Tested databases ran with their default settings without any enhancements. No encryption, replication, or sharding features were enabled either. Such features are delivered by default in DynamoDB and QLDB and if enabled in other technologies they lead to an increase in execution time and consequently a reduction in TPS is expected.
+
+
 #### Notes: 
 
-In this experiment, issues of idempotency were not considered.
+In this experiment, idempotency treatments were not considered.
 
 Idempotency support:
 - Amazon DynamoDB: Allow to implicitly insert or update data, balance update requires running in a transactional context.
@@ -46,7 +50,9 @@ Idempotency support:
 - Microsoft SQL Server: It is possible to define keys in the tables with Unique Constraints guaranteeing the non-duplication of data, but the treatment of INSERT or UPDATE is done manually, intercepting exceptions or performing SELECT command first.
 
 
-The number of test samples was initially set to 100,000. For some technologies, the execution time made it impossible to execute this quantity and they were reduced to 20,000 samples
+The number of test samples was initially set to 100,000. For some technologies, the execution time made it impossible to execute this quantity and they were reduced to 20,000 samples.
+
+
 
 ### Infrastructure used
 
@@ -82,5 +88,23 @@ All execution logs can be seen in [logs](./benchmark/logs)
 ![Same Account Batch Total Time](benchmark/same_account_batch_databases_total_time.png)
 
 ![Same Account Batch Avg Tps](benchmark/same_account_batch_databases_avg_tps.png)
+
+
+## Conclusion
+
+
+I was quite surprised with the response times of Microsoft SQL Server 2022 Ledger Tables, which proved to be even more performant on physical SSD disks. It is worth noting that Ledger Tables is a feature of SQL Server and benefits from all other features of this powerful DBMS. In terms of usability, SQL Server was also superior to other players.
+
+
+All data is also stored in "technical tables" containing the different versions of the data and the respective operations, responsible user and hash of all changes made. All this information added to the good old T-SQL makes it much easier to locate, identify and cross-reference information.
+
+
+ImmuDB is a project that I believe will grow a lot and already has robust resources guaranteeing resilience, flexibility and high performance to be used in a productive way.
+
+
+There are two ways to work with ImmuDB, key/value and SQL (similar to T-SQL). Some features in the SQL-compatible API are not as evolved and do not deliver the same capabilities as the key/value model when performing an audit and checking the history of data changes or even querying the state of information in a certain moment.
+
+
+QLDB is a managed product which greatly facilitates its operation, but I missed having visibility and access to capacity model configurations in order to leave RCU/WCU provisioned and assess whether it would bring improvements in response times. I found its simple usage and the information tracking resources in auditing and integrity verification processes is very complete.
 
 
