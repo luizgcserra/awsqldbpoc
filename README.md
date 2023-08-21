@@ -70,7 +70,6 @@ CREATE INDEX ON transactions (UniqueId)
 
 No configurations or optimizations were made to the tested infrastructure and products running with your defaults settings.
 
-In SQL Server you can achieve better results on faster SSD disks.
 
 ## Results
 
