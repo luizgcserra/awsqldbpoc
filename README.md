@@ -103,7 +103,7 @@ I was quite surprised with the response times of Microsoft SQL Server 2022 Ledge
 All data is also stored in "technical tables" containing the different versions of the data and the respective operations, responsible user and hash of all changes made. All this information added to the good old T-SQL makes it much easier to locate, identify and cross-reference information.
 
 
-ImmuDB is a project that I believe will grow a lot and already has robust resources guaranteeing resilience, flexibility and high performance to be used in a productive way.
+ImmuDB is a project that I believe will grow a lot and already has robust resources ensuring resilience, flexibility and high performance to be used productively.
 
 
 There are two ways to work with ImmuDB, key/value and SQL (similar to T-SQL). Some features in the SQL-compatible API are not as evolved and do not deliver the same capabilities as the key/value model when performing an audit and checking the history of data changes or even querying the state of information in a certain moment.
